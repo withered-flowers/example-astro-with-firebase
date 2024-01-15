@@ -1,16 +1,30 @@
 ---
+export const prerender = false;
 
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getExampleData } from "@/repositories/firebase/server";
+
+const data = await getExampleData();
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Withered Flowers - Home Page">
+  <section class="p-4 bg-gray-50 min-h-dvh min-w-full">
+    <h1 class="text-3xl font-semibold mb-4">Halo Dunia</h1>
+
+    <section class="flex flex-col gap-2">
+      {
+        data.map((example) => (
+          <>
+            <a
+              href={`/examples/${example.slug}`}
+              class="p-4 bg-white rounded shadow"
+            >
+              <h2 class="text-xl font-semibold">{example.product}</h2>
+              <p>{example.description}</p>
+            </a>
+          </>
+        ))
+      }
+    </section>
+  </section>
+</BaseLayout>

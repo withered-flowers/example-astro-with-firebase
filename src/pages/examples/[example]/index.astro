@@ -1,0 +1,31 @@
+---
+export const prerender = true;
+
+import type { GetStaticPaths } from "astro";
+import { getExampleData } from "@/repositories/firebase/server";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+export const getStaticPaths = (async () => {
+  const examples = await getExampleData();
+  const mappedExamples = examples.map((example) => ({
+    params: {
+      example: example.slug,
+    },
+    props: {
+      example,
+    },
+  }));
+
+  return mappedExamples;
+}) satisfies GetStaticPaths;
+
+const { example } = Astro.params;
+const { example: exampleData } = Astro.props;
+---
+
+<BaseLayout title={exampleData.product}>
+  <section>
+    <p>Halaman: {example}</p>
+    <p>Contoh: {exampleData.product} - {exampleData.description}</p>
+  </section>
+</BaseLayout>
